@@ -15,25 +15,13 @@
       <button class="btn btn--remove" v-bind:disabled="cards.length === 0" v-on:click="removeLast">
         remove last card
       </button>
-      <br>
+      
       <h3 v-if="cards.length > 1">{{ `${cards.length} cards:` }}</h3>
       <h3 v-if="cards.length === 1">{{ `${cards.length} card:` }}</h3>
-      <div class="new-card" v-if="cards.length === 0">{{ `There are no cards. If You want to add, please enter data:` }}<br>
+      <div class="new-card" v-if="cards.length === 0">{{ `There are no cards. If You want to add, please enter data:` }}
       </div>
 
-      <div class="row">
-        <section v-for="(card, index) in cards" v-bind:key="card.id" class="column">
-          <div class="bordered">
-            <h4>{{ card.title }}</h4>
-            <hr v-show="card.isShowSubtitle" />
-            <span v-if="card.subtitle && card.isShowSubtitle">{{ card.subtitle }}</span>
-
-            <div class="removeIcon" v-on:click="removeCard(index)" title="Remove this Card">+</div>
-            <div class="hideSubtitle" title="Hide Subtitle" v-if="card.isShowSubtitle" v-on:click="hideSubtitle(card)">&uArr;</div>
-            <div class="showSubtitle" title="Show Subtitle" v-if="card.subtitle && !card.isShowSubtitle" v-on:click="showSubtitle(card)">&dArr;</div>
-          </div>
-        </section>
-      </div><br>
+      <cards v-bind:cards="cards" @card-removed="removeCard" @cardsubtitle-shown="showSubtitle" @cardsubtitle-hidden="hideSubtitle"></cards>
 
       <div>
         <input type="text" v-model="title" placeholder="Title of Card"><br>
