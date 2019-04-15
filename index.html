@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Start Vue</title>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+
+  <body>
+    <div id="app" class="container">
+      <button class="btn btn--remove" v-bind:disabled="cards.length === 0" v-on:click="removeFirst">
+        remove first card
+      </button>
+      <button class="btn btn--remove" v-bind:disabled="cards.length === 0" v-on:click="removeLast">
+        remove last card
+      </button>
+      <br>
+      <h3 v-if="cards.length > 1">{{ `${cards.length} cards:` }}</h3>
+      <h3 v-if="cards.length === 1">{{ `${cards.length} card:` }}</h3>
+      <div class="new-card" v-if="cards.length === 0">{{ `There are no cards. If You want to add, please enter data:` }}<br>
+      </div>
+
+      <div class="row">
+        <section v-for="(card, index) in cards" v-bind:key="card.id" class="column">
+          <div class="bordered">
+            <h4>{{ card.title }}</h4>
+            <hr v-show="card.isShowSubtitle" />
+            <span v-if="card.subtitle && card.isShowSubtitle">{{ card.subtitle }}</span>
+
+            <div class="removeIcon" v-on:click="removeCard(index)" title="Remove this Card">+</div>
+            <div class="hideSubtitle" title="Hide Subtitle" v-if="card.isShowSubtitle" v-on:click="hideSubtitle(card)">&uArr;</div>
+            <div class="showSubtitle" title="Show Subtitle" v-if="card.subtitle && !card.isShowSubtitle" v-on:click="showSubtitle(card)">&dArr;</div>
+          </div>
+        </section>
+      </div><br>
+
+      <div>
+        <input type="text" v-model="title" placeholder="Title of Card"><br>
+        <input type="text" v-model="subtitle" placeholder="Subtitle"><br>
+        <button class="btn btn--add" type="submit" v-on:click="addCard">Add card</button>        
+      </div>
+    </div>
+    <script src="./index.js"></script>
+  </body>
+</html>

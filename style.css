@@ -1,0 +1,57 @@
+body {
+  box-sizing: border-box;
+  margin: 20px auto;
+  padding: 10px;
+  max-width: 800px;
+}
+
+.btn {
+  margin: 5px 10px;
+  padding: 5px;
+  width: 120px;        
+}
+.btn--remove {
+  background: #ffb6c1;
+}
+.btn--add {
+  background: #90ee90;
+  color: #fff;
+}
+.bordered {
+  border: 1px solid rebeccapurple;
+  position: relative;
+}
+.new-card {
+  margin: 0;
+}
+.removeIcon {
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  font-size: 30px;
+  cursor: pointer;
+  transform: rotate(45deg);
+  color:#ff0000;
+  font-weight: 900;
+  text-shadow: 1px 1px 2px black, 0 0 1em red;
+}
+.hideSubtitle {
+  position: absolute;
+  top: 30px;
+  right: 5px;
+  font-size: 25px;
+  cursor: pointer;
+  color:#ff0000;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px orange, 0 0 1em red;
+}
+.showSubtitle {
+  position: absolute;
+  top: 30px;
+  right: 5px;
+  font-size: 25px;
+  cursor: pointer;
+  color:#00ff00;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px black, 0 0 1em #00ff00;
+}
