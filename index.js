@@ -1,31 +1,51 @@
+const cardComponent = {
+  template: `
+    <section class="column" @click="$emit('click')">
+      <div class="bordered">
+        <h4>{{ card.title }}</h4>
+        <hr v-show="card.isShowSubtitle" />
+        <span v-if="card.subtitle && card.isShowSubtitle">{{ card.subtitle }}</span>
+
+        <div class="removeIcon" v-on:click="requestRemoveCard(index)" title="Remove this Card">+</div>
+        <div class="hideSubtitle" title="Hide Subtitle" v-if="card.isShowSubtitle" v-on:click="requestHideSubtitle(card)">&uArr;</div>
+        <div class="showSubtitle" title="Show Subtitle" v-if="card.subtitle && !card.isShowSubtitle" v-on:click="requestShowSubtitle(card)">&dArr;</div>
+      </div>
+    </section>
+  `,
+  props: {
+    card: {
+      type: Object,
+      default() {
+        return {id: 100};
+      }
+    }
+  }
+}
+
+
 Vue.component('cards', {
   props: {
     cards: Array
   },
+  components: {
+    'card': cardComponent,
+  },
   methods: {
-    removeCard(index) {
+    requestRemoveCard(index) {
       this.$emit('card-removed', index);
     },
-    hideSubtitle(card) {
+    requestHideSubtitle(card) {
       this.$emit('cardsubtitle-hidden', card);
     },
-    showSubtitle(card) {
+    requestShowSubtitle(card) {
       this.$emit('cardsubtitle-shown', card);
     },
   },
   template: `
     <div class="row">
-      <section v-for="(card, index) in cards" v-bind:key="card.id" class="column">
-        <div class="bordered">
-          <h4>{{ card.title }}</h4>
-          <hr v-show="card.isShowSubtitle" />
-          <span v-if="card.subtitle && card.isShowSubtitle">{{ card.subtitle }}</span>
+      <card v-for="(card, index) in cards" :key="card.id" :card="card">
 
-          <div class="removeIcon" v-on:click="removeCard(index)" title="Remove this Card">+</div>
-          <div class="hideSubtitle" title="Hide Subtitle" v-if="card.isShowSubtitle" v-on:click="hideSubtitle(card)">&uArr;</div>
-          <div class="showSubtitle" title="Show Subtitle" v-if="card.subtitle && !card.isShowSubtitle" v-on:click="showSubtitle(card)">&dArr;</div>
-        </div>
-      </section>
+      </card>
     </div>
   `,
   data() {
