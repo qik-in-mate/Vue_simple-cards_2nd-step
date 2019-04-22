@@ -21,9 +21,13 @@
       <div class="new-card" v-if="cards.length === 0">{{ `There are no cards. If You want to add, please enter data:` }}
       </div>
 
-      <cards v-bind:cards="cards" @card-removed="removeCard" @cardsubtitle-shown="showSubtitle" @cardsubtitle-hidden="hideSubtitle"></cards>
+      <h3 v-if="inFavorites.length > 0">{{ `There are ${inFavorites.length} cards in Favorites list.` }}</h3>
+      <h3 v-if="inFavorites.length === 0">{{ `Favorites list is empty...` }}</h3>
 
-      <div>
+
+      <cards :cards="cards" @card-removed="removeCard" @cardsubtitle-shown="showSubtitle" @cardsubtitle-hidden="hideSubtitle" @added-to-favorite="addToFavorite" @deleted-from-favorite="deleteFromFavorite"></cards>
+
+      <div><br>
         <input type="text" v-model="title" placeholder="Title of Card"><br>
         <input type="text" v-model="subtitle" placeholder="Subtitle"><br>
         <button class="btn btn--add" type="submit" v-on:click="addCard">Add card</button>        

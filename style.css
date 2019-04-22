@@ -20,6 +20,7 @@ body {
 .bordered {
   border: 1px solid rebeccapurple;
   position: relative;
+  min-height: 61px;
 }
 .new-card {
   margin: 0;
@@ -54,4 +55,17 @@ body {
   color:#00ff00;
   font-weight: bold;
   text-shadow: 1px 1px 2px black, 0 0 1em #00ff00;
+}
+.isFavorite {
+  position: absolute;
+  top: 12px;
+  right: 50px;
+  font-size: 30px;
+  cursor: pointer;
+  color:white;
+  font-weight: bold;
+  text-shadow: 1px -1px 5px black, 0 0 1em red;
+}
+.isFavorite--true {
+  color: red;
 }
