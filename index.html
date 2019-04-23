@@ -9,27 +9,35 @@
 
   <body>
     <div id="app" class="container">
-      <button class="btn btn--remove" v-bind:disabled="cards.length === 0" v-on:click="removeFirst">
-        remove first card
-      </button>
-      <button class="btn btn--remove" v-bind:disabled="cards.length === 0" v-on:click="removeLast">
-        remove last card
-      </button>
-      
-      <h3 v-if="cards.length > 1">{{ `${cards.length} cards:` }}</h3>
-      <h3 v-if="cards.length === 1">{{ `${cards.length} card:` }}</h3>
-      <div class="new-card" v-if="cards.length === 0">{{ `There are no cards. If You want to add, please enter data:` }}
+      <div class="buttonField">
+        <button class="btn btn--remove" v-bind:disabled="cards.length === 0" v-on:click="removeFirst">
+          remove first card
+        </button>
+        <button class="btn btn--remove" v-bind:disabled="cards.length === 0" v-on:click="removeLast">
+          remove last card
+        </button>
       </div>
+      <div class="quickMenu">
+        <h3 v-if="cards.length > 1">Total: {{ `${cards.length} cards` }}<div v-if="cards.length > 1" class="filterOut" @click="showAllCards" title="Show all cards">&#9850;</div></h3>
+        
+        <h3 v-if="cards.length === 1">{{ `${cards.length} card` }}</h3>
+        <div class="new-card" v-if="cards.length === 0">{{ `There are no cards. If You want to add, please enter data:` }}</div>
 
-      <h3 v-if="inFavorites.length > 0">{{ `There are ${inFavorites.length} cards in Favorites list.` }}</h3>
-      <h3 v-if="inFavorites.length === 0">{{ `Favorites list is empty...` }}</h3>
+        <h3 v-if="inFavorites.length > 1">{{ `There are ${inFavorites.length} cards in Favorites list.` }}
+          <div class="filterOut" @click="showOnlyFavorites" title="Show cards in Favorites only">&#9850;</div>
+        </h3>
+        <h3 v-if="inFavorites.length === 1">{{ `There is ${inFavorites.length} card in Favorites list.` }}
+          <div class="filterOut" @click="showOnlyFavorites" title="Show cards in Favorites only">&#9850;</div>
+        </h3>
+        <h3 v-if="inFavorites.length === 0">{{ `Favorites list is empty...` }}</h3>        
+      </div>
 
 
       <cards :cards="cards" @card-removed="removeCard" @cardsubtitle-shown="showSubtitle" @cardsubtitle-hidden="hideSubtitle" @added-to-favorite="addToFavorite" @deleted-from-favorite="deleteFromFavorite"></cards>
 
-      <div><br>
-        <input type="text" v-model="title" placeholder="Title of Card"><br>
-        <input type="text" v-model="subtitle" placeholder="Subtitle"><br>
+      <div class="newCardField"><br>
+        <input type="text" v-model="title" placeholder="Title of Card">
+        <input type="text" v-model="subtitle" placeholder="Subtitle">
         <button class="btn btn--add" type="submit" v-on:click="addCard">Add card</button>        
       </div>
     </div>
