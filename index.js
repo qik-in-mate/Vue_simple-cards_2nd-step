@@ -2,7 +2,7 @@ const cardComponent = {
   template: `
     <section class="column" @click="$emit('click')">
       <div class="bordered">
-        <h4>{{ card.title }}</h4>
+        <h4 class="card__title">{{ card.title }}</h4>
         <hr v-show="card.isShowSubtitle" />
         <span v-if="card.subtitle && card.isShowSubtitle">{{ card.subtitle }}</span>
 
@@ -110,15 +110,25 @@ new Vue({
     title: '',
     subtitle: '',
     count: 3,
-    inFavorites: [],
   },
-  
+
+  computed: {
+    inFavorites: function(card) {
+      let inFavorites = [];
+      if (card.isFavorite) {
+        inFavorites.push(card.id);
+      }
+      return inFavorites;
+    }
+  },
   methods: {
-    removeFirst() {
-      this.cards.shift();
+    removeFirst(card) {
+      this.cards.shift(card);
+      this.deleteFromFavorite(card);
     },
-    removeLast() {
-      this.cards.pop();
+    removeLast(card) {
+      this.cards.pop(card);
+      this.deleteFromFavorite(card);
     },
     removeCard(card) {
       this.cards.splice(this.cards.indexOf(card), 1);
@@ -143,18 +153,36 @@ new Vue({
       this.subtitle = '';
     },
     addToFavorite(card) {
-      if (this.inFavorites.includes(card.id) === true) {
+      if (this.inFavorites.includes(card.id)) {
         return;
       }
       this.inFavorites.push(card.id);
       card.isFavorite = true;
     },
     deleteFromFavorite(card) {
-      if (this.inFavorites.includes(card.id) === false) {
+      if (!this.inFavorites.includes(card.id)) {
         return;
       }
       this.inFavorites.splice(this.inFavorites.indexOf(card.id), 1);
       card.isFavorite = false;
-    }
+    },
+    
+    showOnlyFavorites() {
+      let favoriteIds = [];
+      let filteredCards = [];
+      for (let value in this.inFavorites) {
+        favoriteIds.push(this.inFavorites[value]);
+      }
+      for (var i = 0; i < this.cards.length; i++) {
+        if (favoriteIds.includes(this.cards[i].id) === true) {
+          filteredCards.push(this.cards[i]);
+        }
+      }
+      console.log(filteredCards);
+      this.cards = filteredCards;
+    },
+    showAllCards() {
+      filteredCards = this.cards;
+    },
   },
 });
