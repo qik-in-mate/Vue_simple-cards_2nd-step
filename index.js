@@ -74,7 +74,8 @@ Vue.component('cards', {
         @added-to-favorite="requestAddToFavorite(card)" 
         @deleted-from-favorite="requestDeleteFromFavorite" 
         @cardsubtitle-shown="requestShowSubtitle(card)" 
-        @cardsubtitle-hidden="requestHideSubtitle(card)">
+        @cardsubtitle-hidden="requestHideSubtitle(card)"
+        v-if="!card.isHiddenCard">
       </card>
     </div>
   `,
@@ -94,10 +95,12 @@ new Vue({
         subtitle: 'next level',
         isShowSubtitle: false,
         isFavorite: false,
+        isHiddenCard: false,
       },
       { id: 2, 
         title: 'Street art swag',
         isFavorite: false,
+        isHiddenCard: false,
       },
       {
         id: 3,
@@ -105,6 +108,7 @@ new Vue({
         subtitle: 'tousled copper mug, gochujang crucifix try-hard tbh',
         isShowSubtitle: false,
         isFavorite: false,
+        isHiddenCard: false,
       },
     ],
     title: '',
@@ -113,10 +117,12 @@ new Vue({
   },
 
   computed: {
-    inFavorites: function(card) {
+    inFavorites: function() {
       let inFavorites = [];
-      if (card.isFavorite) {
-        inFavorites.push(card.id);
+      for (let i = 0; i < this.cards.length; i++) {
+        if (this.cards[i].isFavorite) {
+          inFavorites.push(this.cards[i].id);
+        }
       }
       return inFavorites;
     }
@@ -147,7 +153,8 @@ new Vue({
         title: this.title,
         subtitle: this.subtitle,
         isShowSubtitle: false,
-        isFavorite: false
+        isFavorite: false,
+        isHiddenCard: false,
       });
       this.title = '';
       this.subtitle = '';
@@ -166,23 +173,21 @@ new Vue({
       this.inFavorites.splice(this.inFavorites.indexOf(card.id), 1);
       card.isFavorite = false;
     },
-    
     showOnlyFavorites() {
-      let favoriteIds = [];
       let filteredCards = [];
-      for (let value in this.inFavorites) {
-        favoriteIds.push(this.inFavorites[value]);
-      }
-      for (var i = 0; i < this.cards.length; i++) {
-        if (favoriteIds.includes(this.cards[i].id) === true) {
+      for (let i = 0; i < this.cards.length; i++) {
+        this.cards[i].isHiddenCard = true;
+        if (this.inFavorites.includes(this.cards[i].id)) {
           filteredCards.push(this.cards[i]);
+          this.cards[i].isHiddenCard = false;
         }
       }
-      console.log(filteredCards);
-      this.cards = filteredCards;
     },
     showAllCards() {
-      filteredCards = this.cards;
+      console.log(this.cards)
+      for (var i = 0; i < this.cards.length; i++) {
+        this.cards[i].isHiddenCard = false;
+      }
     },
   },
 });
