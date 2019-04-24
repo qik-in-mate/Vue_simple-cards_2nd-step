@@ -184,7 +184,6 @@ new Vue({
       }
     },
     showAllCards() {
-      console.log(this.cards)
       for (var i = 0; i < this.cards.length; i++) {
         this.cards[i].isHiddenCard = false;
       }
