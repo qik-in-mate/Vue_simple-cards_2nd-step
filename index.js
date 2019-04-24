@@ -174,17 +174,15 @@ new Vue({
       card.isFavorite = false;
     },
     showOnlyFavorites() {
-      let filteredCards = [];
       for (let i = 0; i < this.cards.length; i++) {
         this.cards[i].isHiddenCard = true;
         if (this.inFavorites.includes(this.cards[i].id)) {
-          filteredCards.push(this.cards[i]);
           this.cards[i].isHiddenCard = false;
         }
       }
     },
     showAllCards() {
-      for (var i = 0; i < this.cards.length; i++) {
+      for (let i = 0; i < this.cards.length; i++) {
         this.cards[i].isHiddenCard = false;
       }
     },
