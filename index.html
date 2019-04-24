@@ -18,7 +18,9 @@
         </button>
       </div>
       <div class="quickMenu">
-        <h3 v-if="cards.length > 1">Total: {{ `${cards.length} cards` }}<div v-if="cards.length > 1" class="filterOut" @click="showAllCards" title="Show all cards">&#9850;</div></h3>
+        <h3 v-if="cards.length > 1">Total: {{ `${cards.length} cards` }}
+          <div v-if="cards.length > 1" class="filterOut" @click="showAllCards" title="Show all cards">&#9850;</div>
+        </h3>
         
         <h3 v-if="cards.length === 1">{{ `${cards.length} card` }}</h3>
         <div class="new-card" v-if="cards.length === 0">{{ `There are no cards. If You want to add, please enter data:` }}</div>
