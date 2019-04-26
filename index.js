@@ -74,8 +74,7 @@ Vue.component('cards', {
         @added-to-favorite="requestAddToFavorite(card)" 
         @deleted-from-favorite="requestDeleteFromFavorite" 
         @cardsubtitle-shown="requestShowSubtitle(card)" 
-        @cardsubtitle-hidden="requestHideSubtitle(card)"
-        v-if="!card.isHiddenCard">
+        @cardsubtitle-hidden="requestHideSubtitle(card)">
       </card>
     </div>
   `,
@@ -89,31 +88,27 @@ new Vue({
   el: '#app',
   data: {
     cards: [
-      {
-        id: 1,
+      { id: 1,
         title: 'Seitan polaroid flannel',
         subtitle: 'next level',
         isShowSubtitle: false,
         isFavorite: false,
-        isHiddenCard: false,
       },
       { id: 2, 
         title: 'Street art swag',
         isFavorite: false,
-        isHiddenCard: false,
       },
-      {
-        id: 3,
+      { id: 3,
         title: 'Deep v selvage tousled',
         subtitle: 'tousled copper mug, gochujang crucifix try-hard tbh',
         isShowSubtitle: false,
         isFavorite: false,
-        isHiddenCard: false,
       },
     ],
     title: '',
     subtitle: '',
     count: 3,
+    isOnlyFavoritesShown: false,
   },
 
   computed: {
@@ -125,6 +120,13 @@ new Vue({
         }
       }
       return inFavorites;
+    },
+    showCards() {
+      if (!this.isOnlyFavoritesShown) {
+        return this.cards;
+      } else if (this.isOnlyFavoritesShown) {
+        return this.cards.filter(card => card.isFavorite);
+      }
     }
   },
   methods: {
@@ -154,37 +156,21 @@ new Vue({
         subtitle: this.subtitle,
         isShowSubtitle: false,
         isFavorite: false,
-        isHiddenCard: false,
       });
       this.title = '';
       this.subtitle = '';
     },
     addToFavorite(card) {
-      if (this.inFavorites.includes(card.id)) {
-        return;
-      }
-      this.inFavorites.push(card.id);
       card.isFavorite = true;
     },
     deleteFromFavorite(card) {
-      if (!this.inFavorites.includes(card.id)) {
-        return;
-      }
-      this.inFavorites.splice(this.inFavorites.indexOf(card.id), 1);
       card.isFavorite = false;
     },
     showOnlyFavorites() {
-      for (let i = 0; i < this.cards.length; i++) {
-        this.cards[i].isHiddenCard = true;
-        if (this.inFavorites.includes(this.cards[i].id)) {
-          this.cards[i].isHiddenCard = false;
-        }
-      }
+      this.isOnlyFavoritesShown = true;
     },
     showAllCards() {
-      for (let i = 0; i < this.cards.length; i++) {
-        this.cards[i].isHiddenCard = false;
-      }
+      this.isOnlyFavoritesShown = false;
     },
   },
 });
