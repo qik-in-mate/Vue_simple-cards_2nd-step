@@ -35,7 +35,7 @@
       </div>
 
 
-      <cards :cards="cards" @card-removed="removeCard" @cardsubtitle-shown="showSubtitle" @cardsubtitle-hidden="hideSubtitle" @added-to-favorite="addToFavorite" @deleted-from-favorite="deleteFromFavorite"></cards>
+      <cards :cards="showCards" @card-removed="removeCard" @cardsubtitle-shown="showSubtitle" @cardsubtitle-hidden="hideSubtitle" @added-to-favorite="addToFavorite" @deleted-from-favorite="deleteFromFavorite"></cards>
 
       <div class="newCardField"><br>
         <input type="text" v-model="title" placeholder="Title of Card">
