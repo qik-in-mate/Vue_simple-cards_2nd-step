@@ -5,12 +5,29 @@ const cardComponent = {
         <h4 class="card__title">{{ card.title }}</h4>
         <hr v-show="card.isShowSubtitle" />
         <span v-if="card.subtitle && card.isShowSubtitle">{{ card.subtitle }}</span>
+        <div 
+          class="removeIcon"
+          title="Remove this Card"
+          @click="requestRemoveCard"
+        >+</div>
+        <div 
+          :class="{
+            hideSubtitle: card.isShowSubtitle,
+            showSubtitle: !card.isShowSubtitle
+          }"
+          :title="( card.isShowSubtitle ) ? 'Hide Subtitle' : 'Show Subtitle'"
+          v-if="card.subtitle"
+          @click="requestToggleShowSubtitle(card)"
+        > {{ card.isShowSubtitle ? '&uArr;' : '&dArr;' }} </div>
 
-        <div class="removeIcon" @click="requestRemoveCard" title="Remove this Card">+</div>
-        <div class="hideSubtitle" title="Hide Subtitle" v-if="card.isShowSubtitle" @click="requestHideSubtitle(card)">&uArr;</div>
-        <div class="showSubtitle" title="Show Subtitle" v-if="card.subtitle && !card.isShowSubtitle" @click="requestShowSubtitle(card)">&dArr;</div>
-        <div class="isFavorite" title="Add to Favorite" v-if="!card.isFavorite" @click="requestAddToFavorite(card)">&#9829;</div>
-        <div class="isFavorite isFavorite--true" title="Delete From Favorite" v-if="card.isFavorite" @click="requestDeleteFromFavorite(card)">&#9829;</div>
+        <div 
+          :class="{
+            isFavorite: true,
+            'isFavorite--true': card.isFavorite
+          }"
+          :title="( card.isFavorite ) ? 'Delete From Favorite' : 'Add to Favorite'"
+          @click="requestToggleFavorite(card)"
+        >&#9829;</div>
       </div>
     </section>
   `,
@@ -26,22 +43,33 @@ const cardComponent = {
     requestRemoveCard(card) {
       this.$emit('card-removed', card);
     },
-    requestHideSubtitle(card) {
-      this.$emit('cardsubtitle-hidden', card);
+    requestToggleShowSubtitle(card) {
+      this.$emit(
+        `${(card.isShowSubtitle) ? 'cardsubtitle-hidden' : 'cardsubtitle-shown'}`, card
+      );
     },
-    requestShowSubtitle(card) {
-      this.$emit('cardsubtitle-shown', card);
-    },
-    requestAddToFavorite(card) {
-      this.$emit('added-to-favorite', card);
-    },
-    requestDeleteFromFavorite(card) {
-      this.$emit('deleted-from-favorite', card);
+    requestToggleFavorite(card) {
+      this.$emit(
+        `${(card.isFavorite) ? 'deleted-from-favorite' : 'added-to-favorite'}`, card
+      );
     }
   },
 }
 
 Vue.component('cards', {
+  template: `
+    <div class="row">
+      <card v-for="(card, index) in cards" 
+        :key="card.id" 
+        :card="card" 
+        @card-removed="requestRemoveCard(card)" 
+        @added-to-favorite="requestToggleFavorite(card)" 
+        @deleted-from-favorite="requestToggleFavorite(card)" 
+        @cardsubtitle-shown="requestToggleShowSubtitle(card)" 
+        @cardsubtitle-hidden="requestToggleShowSubtitle(card)">
+      </card>
+    </div>
+  `,
   props: {
     cards: Array
   },
@@ -52,32 +80,18 @@ Vue.component('cards', {
     requestRemoveCard(card) {
       this.$emit('card-removed', card);
     },
-    requestHideSubtitle(card) {
-      this.$emit('cardsubtitle-hidden', card);
+    requestToggleShowSubtitle(card) {
+      this.$emit(
+        `${(card.isShowSubtitle) ? 'cardsubtitle-hidden' : 'cardsubtitle-shown'}`, card
+      );
     },
-    requestShowSubtitle(card) {
-      this.$emit('cardsubtitle-shown', card);
-    },
-    requestAddToFavorite(card) {
-      this.$emit('added-to-favorite', card);
-    },
-    requestDeleteFromFavorite(card) {
-      this.$emit('deleted-from-favorite', card);
+    requestToggleFavorite(card) {
+      this.$emit(
+        `${(card.isFavorite) ? 'deleted-from-favorite' : 'added-to-favorite'}`, card
+      );
     }
   },
-  template: `
-    <div class="row">
-      <card v-for="(card, index) in cards" 
-        :key="card.id" 
-        :card="card" 
-        @card-removed="requestRemoveCard(card)" 
-        @added-to-favorite="requestAddToFavorite(card)" 
-        @deleted-from-favorite="requestDeleteFromFavorite" 
-        @cardsubtitle-shown="requestShowSubtitle(card)" 
-        @cardsubtitle-hidden="requestHideSubtitle(card)">
-      </card>
-    </div>
-  `,
+
   data() {
     return {
     };
@@ -121,7 +135,7 @@ new Vue({
       }
       return inFavorites;
     },
-    showCards() {
+    cardsShown() {
       if (!this.isOnlyFavoritesShown) {
         return this.cards;
       } else if (this.isOnlyFavoritesShown) {
@@ -132,21 +146,15 @@ new Vue({
   methods: {
     removeFirst(card) {
       this.cards.shift(card);
-      this.deleteFromFavorite(card);
     },
     removeLast(card) {
       this.cards.pop(card);
-      this.deleteFromFavorite(card);
     },
     removeCard(card) {
       this.cards.splice(this.cards.indexOf(card), 1);
-      this.deleteFromFavorite(card);
     },
-    hideSubtitle(card) {
-      card.isShowSubtitle = false;
-    },
-    showSubtitle(card) {
-      card.isShowSubtitle = true;
+    toggleSubtitle(card) {
+      card.isShowSubtitle ? card.isShowSubtitle = false : card.isShowSubtitle = true;
     },
     addCard() {
       this.count++;      
