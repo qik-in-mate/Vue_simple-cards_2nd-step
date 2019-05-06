@@ -59,7 +59,7 @@ const cardComponent = {
 Vue.component('cards', {
   template: `
     <div class="row">
-      <card v-for="(card, index) in cards" 
+      <card v-for="card in cards" 
         :key="card.id" 
         :card="card" 
         @card-removed="requestRemoveCard(card)" 
@@ -82,12 +82,12 @@ Vue.component('cards', {
     },
     requestToggleShowSubtitle(card) {
       this.$emit(
-        `${(card.isShowSubtitle) ? 'cardsubtitle-hidden' : 'cardsubtitle-shown'}`, card
+        `${card.isShowSubtitle ? 'cardsubtitle-hidden' : 'cardsubtitle-shown'}`, card
       );
     },
     requestToggleFavorite(card) {
       this.$emit(
-        `${(card.isFavorite) ? 'deleted-from-favorite' : 'added-to-favorite'}`, card
+        `${card.isFavorite ? 'deleted-from-favorite' : 'added-to-favorite'}`, card
       );
     }
   },
@@ -102,17 +102,20 @@ new Vue({
   el: '#app',
   data: {
     cards: [
-      { id: 1,
+      { 
+        id: 1,
         title: 'Seitan polaroid flannel',
         subtitle: 'next level',
         isShowSubtitle: false,
         isFavorite: false,
       },
-      { id: 2, 
+      { 
+        id: 2, 
         title: 'Street art swag',
         isFavorite: false,
       },
-      { id: 3,
+      { 
+        id: 3,
         title: 'Deep v selvage tousled',
         subtitle: 'tousled copper mug, gochujang crucifix try-hard tbh',
         isShowSubtitle: false,
@@ -154,7 +157,7 @@ new Vue({
       this.cards.splice(this.cards.indexOf(card), 1);
     },
     toggleSubtitle(card) {
-      card.isShowSubtitle ? card.isShowSubtitle = false : card.isShowSubtitle = true;
+      card.isShowSubtitle = !card.isShowSubtitle;
     },
     addCard() {
       this.count++;      
