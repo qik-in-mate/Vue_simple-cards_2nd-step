@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Start Vue</title>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+
+  <body>
+    <div id="app" class="container">
+      <div class="buttonField">
+        <button class="btn btn--remove" v-bind:disabled="cards.length === 0" v-on:click="removeFirst">
+          remove first card
+        </button>
+        <button class="btn btn--remove" v-bind:disabled="cards.length === 0" v-on:click="removeLast">
+          remove last card
+        </button>
+      </div>
+      <div class="quickMenu">
+        <h3 v-if="cards.length > 1">Total: {{ `${cards.length} cards` }}
+          <div v-if="cards.length > 1" class="filterOut" @click="showAllCards" title="Show all cards">&#9850;</div>
+        </h3>
+        
+        <h3 v-if="cards.length === 1">{{ `${cards.length} card` }}</h3>
+        <div class="new-card" v-if="cards.length === 0">{{ `There are no cards. If You want to add, please enter data:` }}</div>
+
+        <h3 v-if="inFavorites.length > 1">{{ `There are ${inFavorites.length} cards in Favorites list.` }}
+          <div class="filterOut" @click="showOnlyFavorites" title="Show cards in Favorites only">&#9850;</div>
+        </h3>
+        <h3 v-if="inFavorites.length === 1">{{ `There is ${inFavorites.length} card in Favorites list.` }}
+          <div class="filterOut" @click="showOnlyFavorites" title="Show cards in Favorites only">&#9850;</div>
+        </h3>
+        <h3 v-if="inFavorites.length === 0">{{ `Favorites list is empty...` }}</h3>        
+      </div>
+
+
+      <cards :cards="cardsShown" @card-removed="removeCard" @cardsubtitle-shown="toggleSubtitle" @cardsubtitle-hidden="toggleSubtitle" @added-to-favorite="addToFavorite" @deleted-from-favorite="deleteFromFavorite"></cards>
+
+      <div class="newCardField"><br>
+        <input type="text" v-model="title" placeholder="Title of Card">
+        <input type="text" v-model="subtitle" placeholder="Subtitle">
+        <button class="btn btn--add" type="submit" v-on:click="addCard">Add card</button>        
+      </div>
+    </div>
+    <script src="./index.js"></script>
+  </body>
+</html>
